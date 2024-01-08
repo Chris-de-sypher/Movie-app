@@ -101,8 +101,7 @@ nav ul li a {
   position: relative;
   height: 6.5vh;
   width: 0;
-  /*280px*/
-  padding-left: 40px;
+  /*280px*/padding-left: 40px;
   opacity: 0;
   transition: 0.4s ease-out;
   outline: none;
@@ -798,7 +797,7 @@ nav ul li a {
   display: flex;
   gap: 0.5em;
 }
-.movie- img {
+.movie- .banner-image {
   height: 380px;
   width: 400px;
   border-radius: 10px;
@@ -811,6 +810,7 @@ nav ul li a {
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   font-size: 0.9em;
   margin: 10px 0;
+  text-wrap: wrap;
 }
 .overview-for-movie {
   overflow-y: scroll;

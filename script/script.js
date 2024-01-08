@@ -824,7 +824,7 @@ ${cardId}?api_key=${Api_Key}&language=en-US&append_to_response=credits`,
         .join("");
 
       const html = `<div class="movie-" data-id="${response.id}">
-        <img src="${image_path + response.backdrop_path}" alt="" />
+        <img src="${image_path + response.backdrop_path}" alt="" class="banner-image"/>
         <div class="overview-for-movie">
           <h1>${response.title}</h1>
           <div class="full-desc">

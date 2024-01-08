@@ -1,0 +1,31 @@
+/** @format */
+
+@media (max-width: 1000px) {
+  .movie- {
+    flex-direction: column;
+  }
+  .movie- .banner-image {
+    width: 100% !important;
+    transition: 0.4s ease-in;
+    margin-bottom: 20px;
+  }
+  /* .separate-casts{
+    flex-direction: column;
+  } */
+}
+
+@media (max-width: 540px) {
+  .separate-casts {
+    flex-direction: column;
+  }
+    .movie- .banner-image {
+    min-width: 300px;
+  }
+  .overview-for-movie{
+    padding-left: 20px;
+  }
+  .full-desc p{
+    font-size: 0.8em;
+    text-wrap: wrap;
+  }
+}
