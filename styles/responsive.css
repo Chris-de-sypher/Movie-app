@@ -9,9 +9,7 @@
     transition: 0.4s ease-in;
     margin-bottom: 20px;
   }
-  /* .separate-casts{
-    flex-direction: column;
-  } */
+
 }
 
 @media (max-width: 540px) {
