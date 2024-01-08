@@ -86,7 +86,13 @@ search_icon.addEventListener("click", (e) => {
 
   const input = document.querySelector("#Open-search");
 
-  input.classList.toggle("active");
+  if ((screen.width = "500px")) {
+    input.classList.toggle("active_770px");
+  } else if ((screen.width = "360px")) {
+    input.classList.toggle("active_360px");
+  } else {
+    input.classList.toggle("active");
+  }
 });
 
 function getHeight() {
@@ -824,7 +830,9 @@ ${cardId}?api_key=${Api_Key}&language=en-US&append_to_response=credits`,
         .join("");
 
       const html = `<div class="movie-" data-id="${response.id}">
-        <img src="${image_path + response.backdrop_path}" alt="" class="banner-image"/>
+        <img src="${
+          image_path + response.backdrop_path
+        }" alt="" class="banner-image"/>
         <div class="overview-for-movie">
           <h1>${response.title}</h1>
           <div class="full-desc">
@@ -886,3 +894,8 @@ function relatedMovies(Prop) {
   }).join("");
   document.querySelector(".card-placement").innerHTML = new_items;
 }
+
+// bars for menu
+document.querySelector(".fa-bars").onclick = () => {
+  document.querySelector("nav ul").classList.toggle("active_menu");
+};
