@@ -1,5 +1,6 @@
 /** @format */
 
+// our tmdb api key
 const Api_Key = "cd091f14bd53b1bad20889ad20e4b6ea";
 let now_playing_arr;
 let related_movies_arr;
@@ -14,6 +15,7 @@ let crew_array = [];
 // now playing api
 const url = `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1`;
 
+// getting all movie image path from the tmdb api
 const movie_image_base_url = "http://image.tmdb.org/t/p/w500/";
 
 const options = {
@@ -28,9 +30,13 @@ const options = {
 fetch(url, options)
   .then((response) => response.json())
   .then((response) => {
+    // abover we created an array called now_playing_arr and then passed the results gotten from the tmdb api
     now_playing_arr = response.results;
+    // we created a random data by using the Math object and the random method and also we round the figure to a whole number to achieve our result.
     const random_movie = Math.floor(Math.random() * now_playing_arr.length);
+    // after creating the random data which we passed it into the random_movie variable, the now_playing_arr new need to collect the new result. which means only one random data is gotten fro the now_playing_arr
     const new_movie = now_playing_arr[random_movie];
+    // we also want to check for the length of the movie title so if it length is greater than 25 we wanna trim it and also check if the movie have a title if not we pass our default title to it.
     let title = new_movie.title;
     if (title.length >= 25) {
       const trimmedOverview = title.slice(0, 25) + "...";
@@ -38,9 +44,13 @@ fetch(url, options)
     } else if (title.trim() === "") {
       title = "Movie title unavailable";
     }
+    // passing the title to the html element
     document.querySelector(".detail-wrapper hgroup .banner-title").textContent =
       new_movie.title;
     // check the length of the overview and also check if the overview is empty
+    /*
+      some of the movie overviews are empty so instead of leaving it empty we input our own default text
+    */
     let overview = new_movie.overview;
     if (overview.length >= 110) {
       const trimmedOverview = overview.slice(0, 110) + "...";
@@ -49,6 +59,9 @@ fetch(url, options)
       overview =
         "Movie summary for this isn't available at the moment or simply check out their official website";
     }
+    /*
+      setting for the banner using the random dta gotten form the tmdb
+    */
     document.querySelector(".detail-wrapper .overview").textContent = overview;
     // end - overview
     const image_path = movie_image_base_url + new_movie.backdrop_path;
@@ -64,6 +77,9 @@ fetch(url, options)
     movie_banner.setAttributeNode(genreId);
 
     // ntofication
+    /*
+      since we already created the random data from the tmdb api and we also used it above for the banner then we also use it for the notification so that whatsoever result we are getting from the random array we also use it for both the banner and notification
+    */
     const html = `<div class="card" data-id="${new_movie.id}">
                 <img src="${image_path}" alt="" />
                 <div class="summary">
@@ -79,6 +95,9 @@ fetch(url, options)
   .catch((err) => console.error(err));
 
 // the search increase input
+/*
+  once the search icon is clicked we increase the height of the search input.
+*/
 const search_icon = document.querySelector(".search-bar span");
 
 search_icon.addEventListener("click", (e) => {
@@ -86,17 +105,19 @@ search_icon.addEventListener("click", (e) => {
 
   const input = document.querySelector("#Open-search");
 
+  input.classList.toggle("active");
   if ((screen.width = "500px")) {
     input.classList.toggle("active_770px");
   } else if ((screen.width = "360px")) {
     input.classList.toggle("active_360px");
   } else {
-    input.classList.toggle("active");
+    console.log("settings for screen width was blocked due to some errors");
   }
 });
 
 function getHeight() {
   const not_list = document.querySelector(".not-list");
+  // used this to determine the height of the not-list height
   const height = not_list.clientHeight;
 
   not_list.style.height = 352 + "px";
@@ -110,7 +131,7 @@ const logo_copy = document.querySelectorAll(".logo-copy");
 // remove the box modal
 const overlay = document.querySelector(".overlay");
 const remove_overlay = document.querySelector(".box-overlay .fa-xmark");
-
+// remove the overlay if the it has the class of animte__fadeIn
 remove_overlay.onclick = () => {
   if (overlay.classList.contains("animate__fadeIn")) {
     overlay.classList.remove("animate__fadeIn");
@@ -119,9 +140,11 @@ remove_overlay.onclick = () => {
   }
 };
 
+// using the button in the banner to open the overlay and also fetch the data and also the related movies in it as well
 const now_playing = document.querySelector(".details button");
 now_playing.addEventListener("click", (e) => {
   e.preventDefault();
+  // make overlay show so that we can see our results
   if (overlay.classList.contains("animate__fadeOut")) {
     overlay.classList.remove("animate__fadeOut");
     overlay.classList.add("animate__fadeIn");
@@ -133,15 +156,16 @@ now_playing.addEventListener("click", (e) => {
   // get the movie-banner id
   const parent_id =
     e.target.parentElement.parentElement.parentElement.dataset.id;
+  // get the genreId
   const Parent_genreId =
     e.target.parentElement.parentElement.parentElement.getAttribute(
       "data-genreId"
     );
 
-  // place the movie banner id in the url
+  // place the movie banner id in the url as well as ur api key
   const banner_url_info = `https://api.themoviedb.org/3/movie/
 ${parent_id}?api_key=${Api_Key}&language=en-US&append_to_response=credits`;
-
+  // now we fetch
   fetch(banner_url_info)
     .then((res) => res.json())
     .then((data) => {
@@ -170,7 +194,7 @@ ${parent_id}?api_key=${Api_Key}&language=en-US&append_to_response=credits`;
       const time_in_text = `${hours} ${minutes + "mins"} ${
         correctedSeconds + "sec"
       }`;
-
+      // get our html structure for the overlay
       const html = `<div class="card-overlay" data-id="${data.id}">
             <div class="backdrop-image-modal">
 
@@ -199,13 +223,18 @@ ${parent_id}?api_key=${Api_Key}&language=en-US&append_to_response=credits`;
     })
     .catch((err) => console.log(err));
 
-  // fetch the for more like this using tmdb api endpoint
+  // fetch the for more like this using tmdb api endpoint and also we pass the genreId we got from the card.
+  /*
+  so actually what we did here is that we are getting the related movies of the available movie in the banner using the genreId
+  */
   const get_related_movies = `https://api.themoviedb.org/3/discover/movie?api_key=${Api_Key}&language=en-US&sort_by=release_date.desc&page=1&with_genres=${Parent_genreId}`;
 
   fetch(get_related_movies)
     .then((res) => res.json())
     .then((data) => {
+      // we created an array called the related_movies_arr ad pass in the result
       related_movies_arr = data.results;
+      // now we would create a function called relatedMovies and pass in the related_movies_arr as an argument.
       relatedMovies(related_movies_arr);
     })
     .catch((err) => console.log(err));
@@ -217,7 +246,7 @@ window.addEventListener("scroll", (e) => {
   header.classList.toggle("fixed-header", scrollY > -0);
 });
 
-// using the top-rated api
+// using the top-rated api from tmdb
 const top_rated = () => {
   const options = {
     method: "GET",
@@ -234,19 +263,29 @@ const top_rated = () => {
   )
     .then((response) => response.json())
     .then((response) => {
+      // we created an array called the top_rated_arr ad pass in the result
       top_rated_arr = response.results;
+      // now we would create a function called TopRated and pass in the top_rated_arr as an argument.
       TopRated(top_rated_arr);
     })
     .catch((err) => console.error(err));
 };
 
 function TopRated(Prop) {
+  // we want to create a number because remember we are getting our top 20 movies in tmdb api.
+  /*
+  now what we are doing here is we created an array of numbers from 1-20 base on the desire result which is our top 20 best movies
+  */
   let arr_of_numbers = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
   ];
+  // now remeber we passed in the top_rated_arr as an argument in the top_rated function and now we wanna map using the fop of map. map returns a new array unlike forEach.
   const top_rated = Prop.map((item, index) => {
+    // in here we are setting up the image path using the tmdb api movie path which we passed to the variable of movie_image_base_url then we add it to our desire movie image name
     const image_path = movie_image_base_url;
+    // in here we use the position of the data in the array, which we know that array are zero base but in here we use their index which is also their position to loop through the arr_of_numbers to get their individual rating.
     let number_of_rated = arr_of_numbers[index];
+    // we return the result in our html  structure
     return `<div class="top-rated_cover" data-id="${item.id}" data-genreId="${
       item.genre_ids
     }">
